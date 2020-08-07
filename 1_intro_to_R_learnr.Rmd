@@ -1,0 +1,295 @@
+---
+title: "PSYC121: Lab 1"
+output: 
+  learnr::tutorial:
+    progressive: true
+    allow_skip: true
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE, exercise.startover = TRUE}
+library(tidyverse)
+library(learnr)
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## How these tutorials work
+
+These interactive tutorials are designed to guide you through the essential skills in the "R programming language". Within each section you will find short exercises to complete. Often these will ask you to complete snippets of code. Once you have entered your code you can click "Run Code". When you do this, the code is executed by R, and you will see the output of the code. Sometimes the result will be expected, but at other times you will run into problems. This is OK! Programming is all about making mistakes and figuring out what went wrong. 
+
+Sometimes there are "hints" to help you out. Sometimes you will see a "solution" to the exercise. Use these as and when they are appropriate, but don't simply jump straight for the solution. You will learn a lot more if you try to figure things out yourself. So always try out your ideas and feel free to experiment with the code at any time - the code you enter is not going to break the computer! You can choose to "start over" at any time.  If you ever get stuck, there is always an option to move on to the next exercise.
+
+When you are ready to get started, click the "Next Topic" button below. 
+
+## R basics
+
+### Basic addition
+
+In this first section we will go through basic features of r. 
+Run the following code in the console:
+
+```{r basic-calculation, exercise=TRUE, exercise.lines = 5}
+2 + 2
+```
+
+Remember that parentheses can be important when performing calculations:
+```{r basic-calculation-paren, exercise=TRUE, exercise.lines = 5}
+(2 * 10) - 5
+2 * (10 - 5)
+```
+It's always a good idea to comment your code as you go. You can do this using the "#" symbol. Everything on a line after the # is not treated as code. Try adding comments to your previous exercise above to check.
+
+### Basic variables
+
+In R, we will often want to store our calculations in a variable. To do that, we use an arrow symbol, indicating the direction of "assignment". You can create the arrow by typing a "<" symbol and then a "-" symbol. 
+
+```{r, echo = TRUE}
+variable_name <- 2 * (10 - 5) 
+variable_name
+```
+This code does two things: 1) it assigns the calculation to a new variable, and 2) it "calls" that variable. When we create new variables in R, they aren't printed out automatically. So here we tell R to print it, simply by writing the name of the variable. We've called this variable "variable_name", but you can call it anything you like (though special characters like !, *, etc are not allowed).  
+
+In the next box, try to do the following:
+- on lines 1 and 2, create two new variables, assigning numerical values to each
+- on line 3, add these variables together
+
+```{r add-variables, exercise=TRUE, exercise.lines = 5}
+
+```
+
+```{r add-variables-hint}
+var_1 <- 9 # assign 9 to variable called "var_1"
+
+var_1 + 
+```
+
+Variables can also store "characters" in a variable:
+
+```{r, echo =TRUE}
+my_name <- "Bob"
+```
+
+Variables don't have to be single digits or characters. It is often useful to create an "vector":
+
+```{r, echo =TRUE}
+my_numbers <- c(1,2,3)
+the_beatles <- c("John", "Paul", "George", "Ringo")
+```
+
+The special character "c" here is actually a "function". You will learn about those in the next section. For now, it's enough to realise that this stands for "combine". 
+
+Try creating a vector that combines the first names of all the members in your group. Give it an appropriate variable name such as "our_names":
+
+```{r names-vector, exercise=TRUE}
+
+```
+
+### Tibbles
+
+You can also store different types of content together using a "tibble":
+
+```{r, echo=TRUE}
+countries <- tibble(name = c("USA", "UK", "China"),
+                    population_in_millions = c(328, 67, 1400),
+                    leader = c("Donald Trump", "Boris Johnson", "Xi Jinping"))
+countries # remember we need this to print out the tibble after it is created
+
+```
+
+There's quite a lot going on here. "tibble" is used to tell R you are setting up a tibble structure (think of it as a "table"). Within the tibble you tell it what each column is, and what the values are. The column name comes first (e.g., "leader") and then the values for that column (using the "c" function to combine them). Note that each column is separated by a comma. If you don't have this important comma then the tibble won't be created (you can try this if you like by editing the code). Note also where the different parentheses are in this code. We have one set around each of the vectors (name, population_in_millions, and leader). There's also one set for the tibble function. This is why the last line has two closing parentheses - "))".
+
+It's now your turn to create a tibble of your own. Use the above example, but come up with a table to represent facts about your group. It's up to you what you decide to add. If you get really stuck for ideas, or run into issues with the code, check the hint.
+
+```{r user-tibble, exercise=TRUE}
+
+our_group <-  tibble()
+
+our_group
+
+```
+
+```{r user-tibble-hint}
+
+our_group <-  tibble(first_names = c(),
+                     surnames = c(),
+                     place_of_birth = c(),
+                     age = c())
+
+our_group
+
+```
+
+### Functions
+
+A "function" is a bit of code that is "built-in" to the programming language. You have already used some functions, such as "c" and "tibble". There are many, many more. For example:
+
+```{r, echo=TRUE}
+my_numbers <- c(3,4,6,10,100)
+mean(my_numbers) # computes the mean of a set of numbers
+median(my_numbers)
+sd(my_numbers)
+
+```
+
+A function usually takes in some inputs (commonly called "arguments"; in the examples above, this is a set of numbers), performs a computation, and then returns a value (or values). There are a vast number of functions to use in R and we will be learning about, and using, lots of them. 
+
+Functions can be embedded within each other. For example, you might want to compute the mean of a set of numbers and then take the square root of this result:
+
+```{r, echo = TRUE}
+sqrt(mean(c(10,20,30)))
+
+```
+
+There are actually 3 functions operating here. First, the "c" function combines the numbers into a vector. Next the "mean" function computes the mean of those numbers. Finally, the "sqrt" function takes the square-root of the mean of the numbers. If you look closely you will see that each function has it's own set of parentheses, "()". By embedding one within another like this, the result of each function acts as the input for the function it sits within.
+
+Another example of a function is "seq", which generates a sequence of numbers. This function takes several arguments. The first reflects what number the sequence starts on, the second what the sequence ends on, and the third how the sequence increments:
+
+```{r, echo = TRUE}
+seq(from = 1, to = 31, by = 3)
+```
+
+You can see here that we have used the specific names of the arguments. These are listed in the help files for each function, which you can see in R Studio by typing "?" followed by the function name (e.g., "?seq"). You don't have to specify these names:
+
+```{r, echo = TRUE}
+seq(1, 31, 3)
+```
+
+but note that if you do not specify the names then it is crucially important the order the arguments are declared in your code. For example, a very different result occurs with a different order.
+
+```{r, echo = TRUE}
+seq(3, 31, 1)
+```
+This is true of all functions. Unless you are very confident in what you're doing, it's always best to use the argument names. This method has the added benefit of making your code a lot more "readable".
+
+Have a go at combing several functions together. Use the box below to do three steps. Try to do it in one line of code:
+
+1. Generate a sequence of numbers starting on 5, ending on 50, which increments by 5.
+2. Compute the standard devision of this set of numbers.
+3. Compute the square root of the standard deviation.
+
+If you get very stuck, try using the hints.
+
+```{r functions, exercise = TRUE}
+
+```
+
+```{r functions-hint-1}
+seq(from = 5, to = , by = )
+```
+
+```{r functions-hint-2}
+sd(seq(    ))
+```
+
+```{r functions-solution}
+sqrt(sd(seq(from = 5, to = 50, by = 5)))
+```
+
+## Using R Studio
+
+It's now time to get to grips with working in R Studio. For this set of exercises you will be working in R Studio directly, so go ahead an open it up. 
+
+### The Panes
+
+You will see that R Studio is divided into different "panes". You resize these using the grey strips between them. Sometimes it is useful to maximise or minimize a pane, but the default view is very useful. If you mess up the display and lose a pain, go to the menu bar at the top and select: View -> Panes -> Show All Panes. 
+
+### The Console
+
+The first pane to look at is the* **Console**. This is like the dialog boxes you've been using in the tutorial so far. Try typing a seq() command into it:
+
+```{r, echo = TRUE}
+seq(from = 1,to = 10,by = 1)
+```
+
+The console prints out the result of this calculation. It will also tell you about any errors or warnings when things go wrong. Try typing:
+
+```{r, echo = TRUE, eval = FALSE}
+seq(from = 10,to = 1,by = 1) # a sequence from 10 to 1, with increments of 1
+```
+You will see this generates an error message. Sometimes error messages are very cryptic but this one is actually quite useful! Read the error message carefully and see if you can work out how you might correct it to produce the result:
+```{r}
+seq(10,1,-1) # a sequence from 10 to 1, with increments of 1
+```
+
+If you get stuck, just look at the solution below.
+
+```{r fix-sequence, exercise = TRUE}
+
+```
+```{r fix-sequence-solution}
+seq(from = 10, to = 1,by = -1) 
+# the by argument needs to be negative, since the numbers are decreasing from 10 to 1.
+
+```
+
+### The Help pane (also Files and Plots)
+
+The built in **help** files in R are very useful. A simple way to get help is to type "?" and then the function name (e.g., "?seq") into the console and hit enter. Try this now to look at the help files for the functions you have been using so far (i.e., mean, sd, sqrt, c). You should see the help information pop up in the **Help** pane.
+
+If you don't know the specific name of something you are searching for, you can use "??" which performs a general search on the term you give. For example, you might try "??trigonometry". This will lead you to the help file for the built in set of "Trig" functions (cos, sin, tan, etc). 
+
+### The Environment pane (also History)
+
+The **Environment** is where you see the variables that you create in R. Use your knowledge from earlier to create a new variable called "my_sequence", with whatever sequence you like. Provided you don't create an error, you should see this appear as an object in the **Environment** pane. This pane shows all the variables you have created in R, diplaying details about their content and type.
+
+So far we've learnt about the following panes:
+
+**Console**: This is where you can enter single commands, view output of commands, view errors, and search for help.
+
+**Help**: This is where you view help files. However, it has a number of other tabs - it doubles up as the space to view **Files**, and view **Plots** (amongst other things). We will learn about these uses later.
+
+**Environment**: This is where you view the variables you have created. Of the other tabs, the most relevant to you is the **History**, which shows the last commands you have run in the console (you can also press the up arrow when in the console to cycle through previous commands).
+
+### The Source panel
+
+The final panel to introduce is the **Source** panel. This might not be shown initially. Click on File -> New File -> R Script. An "untitled.r" file will appear. ".R" is a file type used for writing basic R code, like  you've been writing in the exercises and in the console. Let's try building our first script and running it. Follow these steps using the knowledge you've gained this session:
+
+1. As a group, work out how many miles your home (non-uni) address is from Lancaster (Google Maps can help here).
+2. Put all these distances in a variable called "miles_from_home" using the c() function.
+3. Calculate the mean of these distances
+4. Calculate the standard deviation of these distances
+5. Save your file in an appropriate place with a suitable name (e.g., "PSYC121_Lab1.R")
+
+You should end up with 3 lines of code. Try to **run the code** by clicking "Source". This will run all the lines in the script. If you get an error, you should use the hints below to help you. If successful, you should see the mean and standard deviation shown in the console.
+
+```{r script, exercise = TRUE}
+
+```
+```{r script-hint-1}
+miles_from_home <- c()
+```
+```{r script-hint-2}
+miles_from_home <- c()
+mean()
+sd()
+```
+```{r script-solution}
+miles_from_home <- c(15,55,250,170) # example
+mean(miles_from_home)
+sd(miles_from_home)
+```
+
+
+
+## End of session quiz
+
+This quiz will test your knowledge of the concepts in this lab session:
+
+```{r quiz}
+quiz(
+  question("Which of these is used for assigning to variables?",
+    answer("<"),
+    answer("$"),
+    answer("<-", correct = TRUE),
+    answer("@")
+  ),
+  question("What line of code does not contain an error?",
+    answer("the_spice_girls <- c(\"Posh\" \"Scary\" \"Sporty\" \"Baby\" \"Ginger\")", message = "commas are missing from between the elements"),
+    answer("ages -> c(19, 23, 27)", message = "assignment is the wrong way around"), 
+    answer("mean(\"football\", \"rugby\", \"tennis\")", message = "cannot take a mean of characters"),
+    answer("sd(seq(1,1000,20))", correct = TRUE),
+    allow_retry = TRUE
+  )
+)
+```
+
