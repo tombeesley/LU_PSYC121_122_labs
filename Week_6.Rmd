@@ -11,6 +11,7 @@ runtime: shiny_prerendered
 library(tidyverse)
 library(learnr)
 load("data_clean.RData") # loads as "data"
+dataQ = data
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
@@ -18,10 +19,10 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ### The questionnaire data
 
-We are going to take a look at the data from the questionnaire you completed in Week 1. The data is loaded into the exercises here, so we can look at it by simply calling it with the name "data":
+We are going to take a look at the data from the questionnaire you completed in Week 1. The data is loaded into the exercises here, so we can look at it by simply calling it with the name "dataQ":
 
-```{r Qdata, exercise = TRUE}
-data
+```{r dataQ, exercise = TRUE}
+dataQ
 
 ```
 
@@ -29,29 +30,29 @@ This is quite a big dataset to work with. We can see the size of it in a couple 
 
 
 ```{r dimensions, exercise = TRUE}
-dim(data) # give the dimensions (rows,colums)
-colnames(data) # list the column names
+dim(dataQ) # give the dimensions (rows,colums)
+colnames(dataQ) # list the column names
 ```
 
 ## Selecting columns
 
-Let's just take a few of these columns to work with in our exercises. To do this we can use the **"select"** command, which is part of dplyr/tidyverse. To use this, specify the dataset you want to use (data), and then the columns you want to select. To specify a list of columns, use the "c" function:
+Let's just take a few of these columns to work with in our exercises. To do this we can use the **"select"** command, which is part of [dplyr package](https://dplyr.tidyverse.org/reference/select.html) from the [tidyverse](https://tidyverse.org/) set of packages. To use this, specify the dataset you want to use (dataQ), and then the columns you want to select. To specify a list of columns, use the "c" function:
 
 ```{r select_1, exercise = TRUE}
-select(data, c(id,age,countries_visited,stroop_control,stroop_compatible,stroop_incompatible))
+select(dataQ, c(id,age,countries_visited,stroop_control,stroop_compatible,stroop_incompatible))
 
 ```
 There are a couple of things that make this command a bit easier to work with. First, you can put the column names on a new line, to create an easier to read list. Anything after a comma in a function can be put on a new line. Secondly, if you need several columns in a row, you can use the colon (:) between the first and last column you need:
 
 ```{r select_2, exercise = TRUE}
-select(data, c(id,
-               age,
-               countries_visited,
-               stroop_control:stroop_incompatible))
+select(dataQ, c(id,
+                age,
+                countries_visited,
+                stroop_control:stroop_incompatible))
 
 ```
 
-It's now your turn to try out the select command. Here you will select a new set of columns and create a new tibble from that selection. Include all of those listed in the last bit of code (you can copy that code if you like) but also add all of the data on social media. Store the result of this selection in a new variable called "data_short".
+It's now your turn to try out the select command. Here you will select a new set of columns and create a new tibble from that selection. Include all of those listed in the last bit of code (you can copy that code if you like) but also add all of the data on social media. Store the result of this selection in a new variable called "dataQ_short".
 
 ```{r select_3, exercise = TRUE}
 
@@ -60,26 +61,72 @@ It's now your turn to try out the select command. Here you will select a new set
 
 ```{r select_3-hint-1}
 
-data_short <- select(data, )
+dataQ_short <- select(dataQ, )
 
 ```
 
 ```{r select_3-solution}
 
-data_short <- select(data, c(id,
-                             age,
-                             countries_visited,
-                             stroop_control:stroop_incompatible,
-                             facebook_days:twitter_follow))
+dataQ_short <- select(dataQ, c(id,
+                               age,
+                               countries_visited,
+                               stroop_control:stroop_incompatible,
+                               facebook_days:twitter_follow))
+
+dataQ_short # print out the result
+```
+
+Let's take a look at another selection of columns. Here we've made "data_short" have some different columns. Check which columns are in data_short using the "colnames" function.
+
+```{r colnames_dataQ_short-setup}
+
+dataQ_short <- select(dataQ, c(id,
+                               age, 
+                               gender,
+                               facebook_days, 
+                               instagram_days,
+                               twitter_days))
 
 ```
 
-which version of data_short is produced?
+```{r colnames_dataQ_short, exercise = TRUE, exercise.setup = "colnames_dataQ_short-setup"}
 
-```{r outputData, exercise = TRUE}
+```
+```{r colnames_dataQ_short-solution}
+colnames(dataQ_short)
+```
 
-data_short
+### Remove columns
+
+We can remove a column using the select command, by using a "-" in front of any column names. Add a second statement to the code below to remove the "age" column from the data.  
+```{r remove_select, exercise = TRUE, exercise.setup = "colnames_dataQ_short-setup"}
+dataQ_short # print the data
 
 ```
 
+```{r remove_select-solution}
+dataQ_short # print the data
 
+select(dataQ_short, -age)
+```
+
+## Filtering data
+
+We've used select to reshape the data in terms of the columns, but we can also reshape and control the data we are working with in terms of the rows. To do this, we can use the **filter** command from [dplyr  package](https://dplyr.tidyverse.org/reference/filter.html). 
+
+To use the filter, we simply specify the data first, and then we need to use an *expression* to state how we want the data to be filtered. For example:
+
+```{r filter_example, exercise = TRUE}
+filter(dataQ, age==27) # find all those people who are 27 years old
+```
+
+The following table gives some examples of very common expressions used in filtering data:
+
+Operator | Meaning | Example
+--|--|--
+== | "is the same as" | filter(dataQ, age==27)
+< | "is less than" | filter(dataQ, age<25)
+> | "is greater than" | filter(dataQ, age>30)
+! | "is not" | filter(dataQ, !gender == "female")
+& | "and" | filter(dataQ, age<30 & gender == "female")
+| |
