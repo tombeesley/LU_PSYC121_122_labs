@@ -10,12 +10,13 @@ runtime: shiny_prerendered
 ```{r setup, include=FALSE, exercise.startover = TRUE}
 library(tidyverse)
 library(learnr)
+library(kableExtra)
 load("data_clean.RData") # loads as "data"
-dataQ = data
+dataQ = data[rep(1:20,11),] # duplicates the data, while in pilot form.
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-## Selecting and viewing datasets
+## Selecting columns from data
 
 ### The questionnaire data
 
@@ -122,11 +123,95 @@ filter(dataQ, age==27) # find all those people who are 27 years old
 
 The following table gives some examples of very common expressions used in filtering data:
 
-Operator | Meaning | Example
---|--|--
-== | "is the same as" | filter(dataQ, age==27)
-< | "is less than" | filter(dataQ, age<25)
-> | "is greater than" | filter(dataQ, age>30)
-! | "is not" | filter(dataQ, !gender == "female")
-& | "and" | filter(dataQ, age<30 & gender == "female")
-| |
+```{r}
+tibble(Operator = c("==", 
+                    "<", 
+                    ">", 
+                    "!", 
+                    "&",
+                    "|"),
+       Meaning = c("is the same as",
+                   "is less than",
+                   "is greater than", 
+                   "is not",
+                   "and",
+                   "or"),
+       Example = c("filter(dataQ, age==27)",
+                   "filter(dataQ, age<25)",
+                   "filter(dataQ, age>30)",
+                   "filter(dataQ, !gender == 'female')",
+                   "filter(dataQ, age<30 & gender == 'female')",
+                   "filter(dataQ, gender == 'male' | gender == 'non-binary')")) %>% 
+  kable() %>% 
+  kable_styling(bootstrap_options = c("striped"))
+```
+
+It's particularly important to note the difference between "==" and "=" in R. "=" is used as an assignment operator - you've used it several times already inside functions (e.g., seq(from = 1, to = 10)). You can think of "=" as meaning "set this to". In contrast the double equals operator, "==", asks a question: "is this thing the same as this other thing?" In the above example, age==27, it looks for all rows in the data where age is the same value as 27. In programming terms, the expression returns a *boolean* value, which reports whether the statement is TRUE or FALSE (and when used in the filter, it finds all rows where it is TRUE). You can see this is in the results of the following "conditional expressions":
+
+```{r binary_test, exercise = TRUE}
+2 == 3
+"blah" == "blah"
+"blah" == "BLAH"
+mean(seq(3,6)) == 4.5
+
+```
+
+Practice writing your own filter commands in the box below. Try to filter the data to match the following queries:
+
+1. Data for all males AND who are taller than 170 cm.
+2. Data for all people who used facebook for more than 2 days but less than 5 days a week.
+3. Data for people who have visited more than 10 countries, AND are NOT female.
+
+```{r filter_play, exercise = TRUE}
+
+```
+```{r filter_play-hint-1}
+filter(dataQ, gender == "male" & <missing>)
+```
+```{r filter_play-hint-2}
+filter(dataQ, facebook_days > <missing> & <missing>)
+```
+```{r filter_play-hint-3}
+filter(dataQ, countries_visited <missing> & !gender == <missing>)
+```
+```{r filter_play-solution}
+filter(dataQ, gender == "male" & height > 170)
+filter(dataQ, facebook_days > 2 & facebook_days < 5)
+filter(dataQ, countries_visited > 10 & !gender == "female")
+```
+
+
+## The pipe operator (%>%)
+
+The select and filter commands are just some of the ways we can shape the data we are working with. As we move from the raw data, to the data of interest, we will build up a series of such commands to obtain the data that we are interested in. For example, we might want to first select some columns, and then filter the data:
+
+```{r nonpipe, exercise = TRUE}
+selected_dataQ <- select(dataQ, age:countries_visited) # select columns
+filtered_selected_dataQ <- filter(selected_dataQ, age < 25) # filter rows
+filtered_selected_dataQ # print out result
+```
+
+Note here that the result of the selection command becomes the dataset we use for the filter command. This means we need to create a new tibble to store the new selection, just to use this immediately in the filter. There's a better way to do this, using the **"pipe"** operator (%>%):
+
+```{r pipe_example, exercise = TRUE}
+
+dataQ %>% select(age:countries_visited) %>% filter(age < 25)
+
+```
+It might help to read the %>% as "send the result to". So we start with simply the tibble dataQ, and *send the result* (the tibble itself) to the select command, perform the select and *send the result to* the filter command, and perform the filter.
+
+You can also put each step on a new line, which is very helpful when you have a long list of operations:
+
+```{r pipe_example_newline, exercise = TRUE}
+
+dataQ %>% 
+  select(age:countries_visited) %>% 
+  filter(age < 25)
+
+```
+
+
+
+
+
+
