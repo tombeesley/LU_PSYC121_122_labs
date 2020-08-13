@@ -12,11 +12,10 @@ library(tidyverse)
 library(learnr)
 library(kableExtra)
 load("data_clean.RData") # loads as "data"
-dataQ = data[rep(1:20,11),] # duplicates the data, while in pilot form.
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-## Selecting columns from data
+## Selecting columns 
 
 ### The questionnaire data
 
@@ -35,7 +34,7 @@ dim(dataQ) # give the dimensions (rows,colums)
 colnames(dataQ) # list the column names
 ```
 
-## Selecting columns
+### Select columns with dplyr::select
 
 Let's just take a few of these columns to work with in our exercises. To do this we can use the **"select"** command, which is part of [dplyr package](https://dplyr.tidyverse.org/reference/select.html) from the [tidyverse](https://tidyverse.org/) set of packages. To use this, specify the dataset you want to use (dataQ), and then the columns you want to select. To specify a list of columns, use the "c" function:
 
@@ -52,6 +51,8 @@ select(dataQ, c(id,
                 stroop_control:stroop_incompatible))
 
 ```
+
+###
 
 It's now your turn to try out the select command. Here you will select a new set of columns and create a new tibble from that selection. Include all of those listed in the last bit of code (you can copy that code if you like) but also add all of the data on social media. Store the result of this selection in a new variable called "dataQ_short".
 
@@ -99,7 +100,7 @@ colnames(dataQ_short)
 
 ### Remove columns
 
-We can remove a column using the select command, by using a "-" in front of any column names. Add a second statement to the code below to remove the "age" column from the data.  
+We can also remove a column using the select command, by using a "-" in front of any column names. Add a second statement to the code below to remove the "age" column from the data.  
 ```{r remove_select, exercise = TRUE, exercise.setup = "colnames_dataQ_short-setup"}
 dataQ_short # print the data
 
@@ -111,15 +112,19 @@ dataQ_short # print the data
 select(dataQ_short, -age)
 ```
 
-## Filtering data
+## Filtering data 
 
-We've used select to reshape the data in terms of the columns, but we can also reshape and control the data we are working with in terms of the rows. To do this, we can use the **filter** command from [dplyr  package](https://dplyr.tidyverse.org/reference/filter.html). 
+### Filtering with dplyr::filter
+
+We've used select to reshape the data in terms of the columns, but we can also reshape and control the data we are working with in terms of the rows. To do this, we can use the **filter** command from [dplyr package](https://dplyr.tidyverse.org/reference/filter.html). 
 
 To use the filter, we simply specify the data first, and then we need to use an *expression* to state how we want the data to be filtered. For example:
 
 ```{r filter_example, exercise = TRUE}
 filter(dataQ, age==27) # find all those people who are 27 years old
 ```
+
+### Common expressions
 
 The following table gives some examples of very common expressions used in filtering data:
 
@@ -156,6 +161,8 @@ mean(seq(3,6)) == 4.5
 
 ```
 
+### Practice filtering
+
 Practice writing your own filter commands in the box below. Try to filter the data to match the following queries:
 
 1. Data for all males AND who are taller than 170 cm.
@@ -166,13 +173,13 @@ Practice writing your own filter commands in the box below. Try to filter the da
 
 ```
 ```{r filter_play-hint-1}
-filter(dataQ, gender == "male" & <missing>)
+#filter(dataQ, gender == "male" & <missing>)
 ```
 ```{r filter_play-hint-2}
-filter(dataQ, facebook_days > <missing> & <missing>)
+#filter(dataQ, facebook_days > <missing> & <missing>)
 ```
 ```{r filter_play-hint-3}
-filter(dataQ, countries_visited <missing> & !gender == <missing>)
+#filter(dataQ, countries_visited <missing> & !gender == <missing>)
 ```
 ```{r filter_play-solution}
 filter(dataQ, gender == "male" & height > 170)
@@ -181,7 +188,7 @@ filter(dataQ, countries_visited > 10 & !gender == "female")
 ```
 
 
-## The pipe operator (%>%)
+## The analysis pipeline
 
 The select and filter commands are just some of the ways we can shape the data we are working with. As we move from the raw data, to the data of interest, we will build up a series of such commands to obtain the data that we are interested in. For example, we might want to first select some columns, and then filter the data:
 
@@ -191,7 +198,11 @@ filtered_selected_dataQ <- filter(selected_dataQ, age < 25) # filter rows
 filtered_selected_dataQ # print out result
 ```
 
-Note here that the result of the selection command becomes the dataset we use for the filter command. This means we need to create a new tibble to store the new selection, just to use this immediately in the filter. There's a better way to do this, using the **"pipe"** operator (%>%):
+Note here that the result of the selection command becomes the dataset we use for the filter command. This means we need to create a new tibble to store the new selection, and then use this immediately in the filter. 
+
+### The pipe operator (%>%)
+
+Thankfully there's a much neater way to do this, by having all steps in an "analysis pipeline" and using the **"pipe"** operator (%>%):
 
 ```{r pipe_example, exercise = TRUE}
 
@@ -200,7 +211,9 @@ dataQ %>% select(age:countries_visited) %>% filter(age < 25)
 ```
 It might help to read the %>% as "send the result to". So we start with simply the tibble dataQ, and *send the result* (the tibble itself) to the select command, perform the select and *send the result to* the filter command, and perform the filter.
 
-You can also put each step on a new line, which is very helpful when you have a long list of operations:
+Note here that the first argument of the *select* and *filter* functions is the data you are making the operations on. When we %>% the results like this, we no longer need to specify the data argument (it is the result of the previous step).
+
+You can also put each step in the pipeline on a new line, which is very helpful when you have a long list of operations:
 
 ```{r pipe_example_newline, exercise = TRUE}
 
@@ -210,8 +223,40 @@ dataQ %>%
 
 ```
 
+### Piping the results to a new variable
+
+You can also assign the results of this pipeline to a new variable. Try it for yourself in the box below:
+
+1. Select only the columns "birth_month" and "countries_visited"
+2. Filter the data to only people born in March
+3. Assign this result to a new variable, e.g., "dataQ_march_births"
+
+```{r pipe_task, exercise = TRUE}
 
 
+```
 
+```{r pipe_task-hint-1}
 
+dataQ_march_births <- dataQ %>% 
+
+```
+
+```{r pipe_task-hint-2}
+
+dataQ_march_births <- dataQ %>% 
+  select(c(age, )) 
+
+```
+```{r pipe_task-solution}
+
+dataQ_march_births <- dataQ %>% 
+  select(c(birth_month, countries_visited)) %>% 
+  filter(birth_month == "march")
+
+```
+
+## R Studio exercises
+
+Now you have completed this week's tutorial, it's time to put some of these skills into practice by building an analysis script in R Studio. Go ahead and open up R Studio on your computer and find a copy of the 
 
