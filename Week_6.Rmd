@@ -11,7 +11,8 @@ runtime: shiny_prerendered
 library(tidyverse)
 library(learnr)
 library(kableExtra)
-load("data_clean.RData") # loads as "data"
+#load("data_clean.RData") # loads as "data"
+dataQ <- read_csv("data_clean.csv")
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
@@ -258,5 +259,16 @@ dataQ_march_births <- dataQ %>%
 
 ## R Studio exercises
 
-Now you have completed this week's tutorial, it's time to put some of these skills into practice by building an analysis script in R Studio. Go ahead and open up R Studio on your computer and find a copy of the 
+Now you have completed this week's tutorial, it's time to put some of these skills into practice by building an analysis script in R Studio. Go ahead and open up R Studio on your computer. You can find the questionnaire data [at the following link](https://github.com/tombeesley/LU_PSYC121_122_labs/blob/master/data_clean.RData) and you can 
+
+
+```{r}
+
+filepath <- "https://github.com/tombeesley/LU_PSYC121_122_labs/blob/master/data_clean.RData"
+
+readRDS(filepath)
+
+
+
+```
 
