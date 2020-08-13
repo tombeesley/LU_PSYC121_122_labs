@@ -120,12 +120,12 @@ $(document).ready(function () {
 <h2>Selecting columns</h2>
 <div id="section-the-questionnaire-data" class="section level3">
 <h3>The questionnaire data</h3>
-<p>We are going to take a look at the data from the questionnaire you completed in Week 1. The data is loaded into the exercises here, so we can look at it by simply calling it with the name “dataQ”:</p>
+<p>We are going to take a look at the data from the questionnaire you completed in Week 1. The data is loaded into the exercises here, so we can look at it by simply calling it with the name <code>dataQ</code>:</p>
 <div class="tutorial-exercise" data-label="dataQ" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <pre class="text"><code>dataQ</code></pre>
 <script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"default","fig.keep":"high","fig.show":"asis","out.width":624,"warning":true,"error":false,"message":true,"exercise.df_print":"paged","exercise.checker":"NULL"}</script>
 </div>
-<p>This is quite a big dataset to work with. We can see the size of it in a couple of ways. First we can use the “dim” function to see the number of rows and the number of columns. We can also use the “colnames” function to see a list of the column names for the data:</p>
+<p>This is quite a big dataset to work with. We can see the size of it in a couple of ways. First we can use the <code>dim()</code> function to see the number of rows and the number of columns. We can also use the <code>colnames()</code> function to see a list of the column names for the data:</p>
 <div class="tutorial-exercise" data-label="dimensions" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <pre class="text"><code>dim(dataQ) # give the dimensions (rows,colums)
 colnames(dataQ) # list the column names</code></pre>
@@ -134,12 +134,12 @@ colnames(dataQ) # list the column names</code></pre>
 </div>
 <div id="section-select-columns-with-dplyrselect" class="section level3">
 <h3>Select columns with dplyr::select</h3>
-<p>Let’s just take a few of these columns to work with in our exercises. To do this we can use the <strong>“select”</strong> command, which is part of <a href="https://dplyr.tidyverse.org/reference/select.html">dplyr package</a> from the <a href="https://tidyverse.org/">tidyverse</a> set of packages. To use this, specify the dataset you want to use (dataQ), and then the columns you want to select. To specify a list of columns, use the “c” function:</p>
+<p>Let’s just take a few of these columns to work with in our exercises. To do this we can use the <strong>“select”</strong> command, which is part of <a href="https://dplyr.tidyverse.org/reference/select.html">dplyr package</a> from the <a href="https://tidyverse.org/">tidyverse</a> set of packages. To use this, specify the dataset you want to use (<code>dataQ</code>), and then the columns you want to select. To specify a list of columns, use the <code>c()</code> function:</p>
 <div class="tutorial-exercise" data-label="select_1" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <pre class="text"><code>select(dataQ, c(id,age,countries_visited,stroop_control,stroop_compatible,stroop_incompatible))</code></pre>
 <script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"default","fig.keep":"high","fig.show":"asis","out.width":624,"warning":true,"error":false,"message":true,"exercise.df_print":"paged","exercise.checker":"NULL"}</script>
 </div>
-<p>There are a couple of things that make this command a bit easier to work with. First, you can put the column names on a new line, to create an easier to read list. Anything after a comma in a function can be put on a new line. Secondly, if you need several columns in a row, you can use the colon (:) between the first and last column you need:</p>
+<p>There are a couple of things that make <code>select()</code> a bit easier to work with. First, you can put the column names on a new line, to create an easier to read list. Anything after a comma in a function can be put on a new line. Secondly, if you need several columns in a row, you can use the colon (<code>:</code>) between the first and last column you need:</p>
 <div class="tutorial-exercise" data-label="select_2" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <pre class="text"><code>select(dataQ, c(id,
                 age,
@@ -150,7 +150,7 @@ colnames(dataQ) # list the column names</code></pre>
 </div>
 <div id="section-section" class="section level3">
 <h3></h3>
-<p>It’s now your turn to try out the select command. Here you will select a new set of columns and create a new tibble from that selection. Include all of those listed in the last bit of code (you can copy that code if you like) but also add all of the data on social media. Store the result of this selection in a new variable called “dataQ_short”.</p>
+<p>It’s now your turn to try out the <code>select()</code> command. Here you will select a new set of columns and create a new tibble from that selection. It might help to copy the previous example and edit it. Select the columns <em>id</em>, <em>age</em>, <em>countries_visited</em> and all those related to the social media responses (remember you can use <code>colnames()</code> to find the names of the columns). Store the result of this selection in a new variable called <code>dataQ_short</code>.</p>
 <div class="tutorial-exercise" data-label="select_3" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"default","fig.keep":"high","fig.show":"asis","out.width":624,"warning":true,"error":false,"message":true,"exercise.df_print":"paged","exercise.checker":"NULL"}</script>
 </div>
@@ -161,12 +161,14 @@ colnames(dataQ) # list the column names</code></pre>
 <pre class="text"><code>dataQ_short &lt;- select(dataQ, c(id,
                                age,
                                countries_visited,
-                               stroop_control:stroop_incompatible,
                                facebook_days:twitter_follow))
 
 dataQ_short # print out the result</code></pre>
 </div>
-<p>Let’s take a look at another selection of columns. Here we’ve made “data_short” have some different columns. Check which columns are in data_short using the “colnames” function.</p>
+</div>
+<div id="section-remove-columns" class="section level3">
+<h3>Remove columns</h3>
+<p>Let’s take a look at another selection of columns and look at how we <em>remove</em> a column. Here we’ve selected some different columns for the tibble <code>dataQ_short</code>. Check which columns are in data_short using the <code>colnames()</code> function.</p>
 <div class="tutorial-exercise-support" data-label="colnames_dataQ_short-setup" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <pre class="text"><code>dataQ_short &lt;- select(dataQ, c(id,
                                age, 
@@ -181,10 +183,7 @@ dataQ_short # print out the result</code></pre>
 <div class="tutorial-exercise-support" data-label="colnames_dataQ_short-solution" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <pre class="text"><code>colnames(dataQ_short)</code></pre>
 </div>
-</div>
-<div id="section-remove-columns" class="section level3">
-<h3>Remove columns</h3>
-We can also remove a column using the select command, by using a “-” in front of any column names. Add a second statement to the code below to remove the “age” column from the data.<br />
+We can remove a column with <code>select()</code> by using a “-” in front of any column names. Add a second statement to the code below to remove the “age” column from the data.<br />
 
 <div class="tutorial-exercise" data-label="remove_select" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <pre class="text"><code>dataQ_short # print the data</code></pre>
@@ -201,8 +200,8 @@ select(dataQ_short, -age)</code></pre>
 <h2>Filtering data</h2>
 <div id="section-filtering-with-dplyrfilter" class="section level3">
 <h3>Filtering with dplyr::filter</h3>
-<p>We’ve used select to reshape the data in terms of the columns, but we can also reshape and control the data we are working with in terms of the rows. To do this, we can use the <strong>filter</strong> command from <a href="https://dplyr.tidyverse.org/reference/filter.html">dplyr package</a>.</p>
-<p>To use the filter, we simply specify the data first, and then we need to use an <em>expression</em> to state how we want the data to be filtered. For example:</p>
+<p>We’ve used select to reshape the data in terms of the columns, but we can also reshape and control the data we are working with in terms of the rows. To do this, we can use the <code>filter()</code> command from <a href="https://dplyr.tidyverse.org/reference/filter.html"><code>dplyr</code></a>.</p>
+<p>To use <code>filter()</code>, we simply specify the data first, and then we need to use an <em>expression</em> to state how we want the data to be filtered. For example:</p>
 <div class="tutorial-exercise" data-label="filter_example" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <pre class="text"><code>filter(dataQ, age==27) # find all those people who are 27 years old</code></pre>
 <script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"default","fig.keep":"high","fig.show":"asis","out.width":624,"warning":true,"error":false,"message":true,"exercise.df_print":"paged","exercise.checker":"NULL"}</script>
@@ -294,7 +293,7 @@ filter(dataQ, gender == ‘male’ | gender == ‘non-binary’)
 </tr>
 </tbody>
 </table>
-<p>It’s particularly important to note the difference between “==” and “=” in R. “=” is used as an assignment operator - you’ve used it several times already inside functions (e.g., seq(from = 1, to = 10)). You can think of “=” as meaning “set this to”. In contrast the double equals operator, “==”, asks a question: “is this thing the same as this other thing?” In the above example, age==27, it looks for all rows in the data where age is the same value as 27. In programming terms, the expression returns a <em>boolean</em> value, which reports whether the statement is TRUE or FALSE (and when used in the filter, it finds all rows where it is TRUE). You can see this is in the results of the following “conditional expressions”:</p>
+<p>It’s particularly important to note the difference between “==” and “=” in R. “=” is used as an assignment operator - you’ve used it several times already inside functions (e.g., <code>seq(from = 1, to = 10)</code>). You can think of “=” as meaning “set this to”. In contrast the double equals operator, “==”, asks a question: “is this thing the same as this other thing?” In the above example, <code>age==27</code>, it looks for all rows in the data where age is the same value as 27. In programming terms, the expression returns a <em>boolean</em> value, which reports whether the statement is TRUE or FALSE (and when used in the filter, it finds all rows where it is TRUE). You can see this is in the results of the following “conditional expressions”:</p>
 <div class="tutorial-exercise" data-label="binary_test" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <pre class="text"><code>2 == 3
 &quot;blah&quot; == &quot;blah&quot;
@@ -332,9 +331,7 @@ filter(dataQ, countries_visited &gt; 10 &amp; !gender == &quot;female&quot;)</co
 </div>
 <div id="section-the-analysis-pipeline" class="section level2">
 <h2>The analysis pipeline</h2>
-<div id="section-non-piped-analysis" class="section level3">
-<h3>Non-piped analysis</h3>
-<p>The select and filter commands are just some of the ways we can shape the data we are working with. As we move from the raw data, to the data of interest, we will build up a series of such commands to obtain the data that we are interested in. For example, we might want to first select some columns, and then filter the data:</p>
+<p>The select and filter commands are just some of the ways we can shape the data we are working with. As we move from the raw data, to the data of interest, we will build up a series of such commands to obtain the data that we are interested in. For example, we might want to first <code>select()</code> some columns, and then <code>filter()</code> the data:</p>
 <div class="tutorial-exercise" data-label="nonpipe" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <pre class="text"><code>selected_dataQ &lt;- select(dataQ, age:countries_visited) # select columns
 filtered_selected_dataQ &lt;- filter(selected_dataQ, age &lt; 25) # filter rows
@@ -342,16 +339,15 @@ filtered_selected_dataQ # print out result</code></pre>
 <script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"default","fig.keep":"high","fig.show":"asis","out.width":624,"warning":true,"error":false,"message":true,"exercise.df_print":"paged","exercise.checker":"NULL"}</script>
 </div>
 <p>Note here that the result of the selection command becomes the dataset we use for the filter command. This means we need to create a new tibble to store the new selection, and then use this immediately in the filter.</p>
-</div>
 <div id="section-the-pipe-operator" class="section level3">
-<h3>The pipe operator (%&gt;%)</h3>
-<p>Thankfully there’s a much neater way to do this, by having all steps in an “analysis pipeline” and using the <strong>“pipe”</strong> operator (%&gt;%):</p>
+<h3>The pipe operator (<code>%&gt;%</code>)</h3>
+<p>Thankfully there’s a much neater way to do this, by having all steps in an “analysis pipeline” and using the <strong>“pipe”</strong> operator (<code>%&gt;%</code>):</p>
 <div class="tutorial-exercise" data-label="pipe_example" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <pre class="text"><code>dataQ %&gt;% select(age:countries_visited) %&gt;% filter(age &lt; 25)</code></pre>
 <script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"default","fig.keep":"high","fig.show":"asis","out.width":624,"warning":true,"error":false,"message":true,"exercise.df_print":"paged","exercise.checker":"NULL"}</script>
 </div>
-<p>It might help to read the %&gt;% as “send the result to”. So we start with simply the tibble dataQ, and <em>send the result</em> (the tibble itself) to the select command, perform the select and <em>send the result to</em> the filter command, and perform the filter.</p>
-<p>Note here that the first argument of the <em>select</em> and <em>filter</em> functions is the data you are making the operations on. When we %&gt;% the results like this, we no longer need to specify the data argument (it is the result of the previous step).</p>
+<p>It might help to read the <code>%&gt;%</code> as “send the result to”. So we start with the tibble <code>dataQ</code>, and <em>send the result</em> (the tibble itself) to the <code>select()</code> command, perform the select and <em>send the result to</em> the <code>filter()</code> command, and perform the filter.</p>
+<p>Note here that the first argument of the <code>select()</code> and <code>filter()</code> functions is the data on which you are working. When we <code>%&gt;%</code> the results like this, we no longer need to specify the data argument (it is the result of the previous step).</p>
 <p>You can also put each step in the pipeline on a new line, which is very helpful when you have a long list of operations:</p>
 <div class="tutorial-exercise" data-label="pipe_example_newline" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <pre class="text"><code>dataQ %&gt;% 
@@ -383,13 +379,44 @@ filtered_selected_dataQ # print out result</code></pre>
   select(c(birth_month, countries_visited)) %&gt;% 
   filter(birth_month == &quot;march&quot;)</code></pre>
 </div>
+</div>
+</div>
+<div id="section-r-studio-exercises" class="section level2">
+<h2>R Studio exercises</h2>
+<div id="section-prepare-a-new-file" class="section level3">
+<h3>Prepare a new file</h3>
+<p>Now you have completed this week’s tutorial, it’s time to put some of these skills into practice by building an analysis script in R Studio. Go ahead and open up R Studio on your computer, and open up a new .R script (save it as “PSYC121_Week_6.R”.</p>
+<p>Copy the lines below and paste them at the top of the script. This will load the tidyverse set of packages and then read the data into R Studio from github:</p>
+</div>
+<div id="section-selecting-data-to-plot" class="section level3">
+<h3>Selecting data to plot</h3>
+<p>Once the data is loaded in, you will see it in the environment. First, remind yourself of the column names. Then we can use our pipe to send this into the graphing tools <code>ggplot()</code>:</p>
+<p>Start by plotting a histogram (<code>+ geom_histogram()</code>) of the number of countries that participants have visited.</p>
+<p>Let’s look at that variable for just a subset of data. Use the select, filter and pipe commands to process the data, store the resulting data as tibble, and then plot that data:</p>
+<ol style="list-style-type: decimal">
+<li>Select the columns <em>gender</em>, <em>countries_visited</em>, <em>home_location</em>.</li>
+<li>Filter the data to participants who come from the North-West of England</li>
+<li>Filter the data to contain only those people identifying as males</li>
+<li>Store this as “males_NW”</li>
+<li>Draw a histogram of the number of countries visited for these participants</li>
+</ol>
+<p>Feel free to explore the data in more detail - you could look at a different subset of data, say Females from the North West, or people from Europe.</p>
+<p>Hoes does the histogram change for the different data sets? Do you notice any patterns?</p>
+<p>Try changing <code>+ geom_histogram()</code> to <a href="https://ggplot2.tidyverse.org/reference/geom_density.html"><code>+geom_density</code></a> (see link for examples). This will provide a smoothed line representing the shape of the distribution of data. The y axis changes from a count of the data, to a probability (0 to 1). You can add another factor to this plot, to see multiple density plots on top of one another. For example, within the <code>aes()</code> parameters, add <code>fill = home_location</code>. To make it a little easier to see each factor, add <code>alpha = .3</code> outside of the <code>aes()</code> parameters.</p>
+</div>
+<div id="section-sampling-data" class="section level3">
+<h3>Sampling data</h3>
+<p>You will have seen that as you reduce the number of participants, the data becomes more noisy. Let’s look at how taking samples of data dramatically affects the results we get. Let’s start with normal distribution, representing the heights of a sample of 100 people, with a mean of 165 and a standard deviation of 10:</p>
+<p>You can run this several times (select code, ctrl+enter) and you will see the resulting density plot changes shape each time. This is because we are drawing a new set of heights at random each time the code is run. Overall though, the density plot will look fairly “normal” and we will see something close to the “bell-shaped” normal distribution. Increase the number of data points to <code>n = 100000</code> and run it again a few times. You will now see a <em>very</em> stable normal distribution of data around the mean height of 165.</p>
+<p>Let’s now also add a step before our graph to sample from this set of heights. Use the <code>slice_sample()</code> command to take a small sample first of all (say 5) and then slowly increase the number of samples drawn each time:</p>
+<p><strong>Discussion points</strong> What happens to the density plot as you take larger samples? At what point does it start to look acceptably normal? What happens when you change the standard deviation of the data (decrease and increase)? How would this affect your decisions when collecting data in an experiment?</p>
 
 <script type="application/shiny-prerendered" data-context="server-start">
 library(tidyverse)
 library(learnr)
 library(kableExtra)
-load("data_clean.RData") # loads as "data"
-dataQ = data[rep(1:20,11),] # duplicates the data, while in pilot form.
+#load("data_clean.RData") # loads as "data"
+dataQ <- read_csv("data_clean.csv")
 knitr::opts_chunk$set(echo = FALSE)
 </script>
  

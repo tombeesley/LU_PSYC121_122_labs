@@ -20,14 +20,14 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ### The questionnaire data
 
-We are going to take a look at the data from the questionnaire you completed in Week 1. The data is loaded into the exercises here, so we can look at it by simply calling it with the name "dataQ":
+We are going to take a look at the data from the questionnaire you completed in Week 1. The data is loaded into the exercises here, so we can look at it by simply calling it with the name `dataQ`:
 
 ```{r dataQ, exercise = TRUE}
 dataQ
 
 ```
 
-This is quite a big dataset to work with. We can see the size of it in a couple of ways. First we can use the "dim" function to see the number of rows and the number of columns. We can also use the "colnames" function to see a list of the column names for the data:
+This is quite a big dataset to work with. We can see the size of it in a couple of ways. First we can use the `dim()` function to see the number of rows and the number of columns. We can also use the `colnames()` function to see a list of the column names for the data:
 
 
 ```{r dimensions, exercise = TRUE}
@@ -37,13 +37,13 @@ colnames(dataQ) # list the column names
 
 ### Select columns with dplyr::select
 
-Let's just take a few of these columns to work with in our exercises. To do this we can use the **"select"** command, which is part of [dplyr package](https://dplyr.tidyverse.org/reference/select.html) from the [tidyverse](https://tidyverse.org/) set of packages. To use this, specify the dataset you want to use (dataQ), and then the columns you want to select. To specify a list of columns, use the "c" function:
+Let's just take a few of these columns to work with in our exercises. To do this we can use the **"select"** command, which is part of [dplyr package](https://dplyr.tidyverse.org/reference/select.html) from the [tidyverse](https://tidyverse.org/) set of packages. To use this, specify the dataset you want to use (`dataQ`), and then the columns you want to select. To specify a list of columns, use the `c()` function:
 
 ```{r select_1, exercise = TRUE}
 select(dataQ, c(id,age,countries_visited,stroop_control,stroop_compatible,stroop_incompatible))
 
 ```
-There are a couple of things that make this command a bit easier to work with. First, you can put the column names on a new line, to create an easier to read list. Anything after a comma in a function can be put on a new line. Secondly, if you need several columns in a row, you can use the colon (:) between the first and last column you need:
+There are a couple of things that make `select()` a bit easier to work with. First, you can put the column names on a new line, to create an easier to read list. Anything after a comma in a function can be put on a new line. Secondly, if you need several columns in a row, you can use the colon (`:`) between the first and last column you need:
 
 ```{r select_2, exercise = TRUE}
 select(dataQ, c(id,
@@ -55,7 +55,7 @@ select(dataQ, c(id,
 
 ###
 
-It's now your turn to try out the select command. Here you will select a new set of columns and create a new tibble from that selection. Include all of those listed in the last bit of code (you can copy that code if you like) but also add all of the data on social media. Store the result of this selection in a new variable called "dataQ_short".
+It's now your turn to try out the `select()` command. Here you will select a new set of columns and create a new tibble from that selection. It might help to copy the previous example and edit it. Select the columns *id*, *age*, *countries_visited* and all those related to the social media responses (remember you can use `colnames()` to find the names of the columns). Store the result of this selection in a new variable called `dataQ_short`.
 
 ```{r select_3, exercise = TRUE}
 
@@ -73,13 +73,14 @@ dataQ_short <- select(dataQ, )
 dataQ_short <- select(dataQ, c(id,
                                age,
                                countries_visited,
-                               stroop_control:stroop_incompatible,
                                facebook_days:twitter_follow))
 
 dataQ_short # print out the result
 ```
 
-Let's take a look at another selection of columns. Here we've made "data_short" have some different columns. Check which columns are in data_short using the "colnames" function.
+### Remove columns
+
+Let's take a look at another selection of columns and look at how we *remove* a column. Here we've selected some different columns for the tibble `dataQ_short`. Check which columns are in data_short using the `colnames()` function.
 
 ```{r colnames_dataQ_short-setup}
 
@@ -99,9 +100,7 @@ dataQ_short <- select(dataQ, c(id,
 colnames(dataQ_short)
 ```
 
-### Remove columns
-
-We can also remove a column using the select command, by using a "-" in front of any column names. Add a second statement to the code below to remove the "age" column from the data.  
+We can remove a column with `select()` by using a "-" in front of any column names. Add a second statement to the code below to remove the "age" column from the data.  
 ```{r remove_select, exercise = TRUE, exercise.setup = "colnames_dataQ_short-setup"}
 dataQ_short # print the data
 
@@ -117,9 +116,9 @@ select(dataQ_short, -age)
 
 ### Filtering with dplyr::filter
 
-We've used select to reshape the data in terms of the columns, but we can also reshape and control the data we are working with in terms of the rows. To do this, we can use the **filter** command from [dplyr package](https://dplyr.tidyverse.org/reference/filter.html). 
+We've used select to reshape the data in terms of the columns, but we can also reshape and control the data we are working with in terms of the rows. To do this, we can use the `filter()` command from [`dplyr`](https://dplyr.tidyverse.org/reference/filter.html). 
 
-To use the filter, we simply specify the data first, and then we need to use an *expression* to state how we want the data to be filtered. For example:
+To use `filter()`, we simply specify the data first, and then we need to use an *expression* to state how we want the data to be filtered. For example:
 
 ```{r filter_example, exercise = TRUE}
 filter(dataQ, age==27) # find all those people who are 27 years old
@@ -152,7 +151,7 @@ tibble(Operator = c("==",
   kable_styling(bootstrap_options = c("striped"))
 ```
 
-It's particularly important to note the difference between "==" and "=" in R. "=" is used as an assignment operator - you've used it several times already inside functions (e.g., seq(from = 1, to = 10)). You can think of "=" as meaning "set this to". In contrast the double equals operator, "==", asks a question: "is this thing the same as this other thing?" In the above example, age==27, it looks for all rows in the data where age is the same value as 27. In programming terms, the expression returns a *boolean* value, which reports whether the statement is TRUE or FALSE (and when used in the filter, it finds all rows where it is TRUE). You can see this is in the results of the following "conditional expressions":
+It's particularly important to note the difference between "==" and "=" in R. "=" is used as an assignment operator - you've used it several times already inside functions (e.g., `seq(from = 1, to = 10)`). You can think of "=" as meaning "set this to". In contrast the double equals operator, "==", asks a question: "is this thing the same as this other thing?" In the above example, `age==27`, it looks for all rows in the data where age is the same value as 27. In programming terms, the expression returns a *boolean* value, which reports whether the statement is TRUE or FALSE (and when used in the filter, it finds all rows where it is TRUE). You can see this is in the results of the following "conditional expressions":
 
 ```{r binary_test, exercise = TRUE}
 2 == 3
@@ -191,7 +190,7 @@ filter(dataQ, countries_visited > 10 & !gender == "female")
 
 ## The analysis pipeline
 
-The select and filter commands are just some of the ways we can shape the data we are working with. As we move from the raw data, to the data of interest, we will build up a series of such commands to obtain the data that we are interested in. For example, we might want to first select some columns, and then filter the data:
+The select and filter commands are just some of the ways we can shape the data we are working with. As we move from the raw data, to the data of interest, we will build up a series of such commands to obtain the data that we are interested in. For example, we might want to first `select()` some columns, and then `filter()` the data:
 
 ```{r nonpipe, exercise = TRUE}
 selected_dataQ <- select(dataQ, age:countries_visited) # select columns
@@ -201,18 +200,18 @@ filtered_selected_dataQ # print out result
 
 Note here that the result of the selection command becomes the dataset we use for the filter command. This means we need to create a new tibble to store the new selection, and then use this immediately in the filter. 
 
-### The pipe operator (%>%)
+### The pipe operator (`%>%`)
 
-Thankfully there's a much neater way to do this, by having all steps in an "analysis pipeline" and using the **"pipe"** operator (%>%):
+Thankfully there's a much neater way to do this, by having all steps in an "analysis pipeline" and using the **"pipe"** operator (`%>%`):
 
 ```{r pipe_example, exercise = TRUE}
 
 dataQ %>% select(age:countries_visited) %>% filter(age < 25)
 
 ```
-It might help to read the %>% as "send the result to". So we start with simply the tibble dataQ, and *send the result* (the tibble itself) to the select command, perform the select and *send the result to* the filter command, and perform the filter.
+It might help to read the `%>%` as "send the result to". So we start with the tibble `dataQ`, and *send the result* (the tibble itself) to the `select()` command, perform the select and *send the result to* the `filter()` command, and perform the filter.
 
-Note here that the first argument of the *select* and *filter* functions is the data you are making the operations on. When we %>% the results like this, we no longer need to specify the data argument (it is the result of the previous step).
+Note here that the first argument of the `select()` and `filter()` functions is the data on which you are working. When we `%>%` the results like this, we no longer need to specify the data argument (it is the result of the previous step).
 
 You can also put each step in the pipeline on a new line, which is very helpful when you have a long list of operations:
 
@@ -259,16 +258,72 @@ dataQ_march_births <- dataQ %>%
 
 ## R Studio exercises
 
-Now you have completed this week's tutorial, it's time to put some of these skills into practice by building an analysis script in R Studio. Go ahead and open up R Studio on your computer. You can find the questionnaire data [at the following link](https://github.com/tombeesley/LU_PSYC121_122_labs/blob/master/data_clean.RData) and you can 
+### Prepare a new file
+
+Now you have completed this week's tutorial, it's time to put some of these skills into practice by building an analysis script in R Studio. Go ahead and open up R Studio on your computer, and open up a new .R script (save it as "PSYC121_Week_6.R". 
+
+Copy the lines below and paste them at the top of the script. This will load the tidyverse set of packages and then read the data into R Studio from github:
 
 
-```{r}
-
-filepath <- "https://github.com/tombeesley/LU_PSYC121_122_labs/blob/master/data_clean.RData"
-
-readRDS(filepath)
-
-
-
+```{r eval = FALSE}
+library(tidyverse)
+dataQ <- read_csv("https://raw.githubusercontent.com/tombeesley/LU_PSYC121_122_labs/master/data_clean.csv")
+head(dataQ) # look at the first few rows
 ```
+
+### Selecting data to plot
+
+Once the data is loaded in, you will see it in the environment. First, remind yourself of the column names. Then we can use our pipe to send this into the graphing tools `ggplot()`:
+
+```{r, eval = FALSE}
+dataQ %>% 
+  ggplot()
+```
+
+Start by plotting a histogram (`+ geom_histogram()`) of the number of countries that participants have visited.
+
+Let's look at that variable for just a subset of data. Use the select, filter and pipe commands to process the data, store the resulting data as tibble, and then plot that data:
+
+1. Select the columns *gender*, *countries_visited*, *home_location*.
+2. Filter the data to participants who come from the North-West of England
+3. Filter the data to contain only those people identifying as males
+4. Store this as "males_NW"
+5. Draw a histogram of the number of countries visited for these participants
+
+Feel free to explore the data in more detail - you could look at a different subset of data, say Females from the North West, or people from Europe.
+
+Hoes does the histogram change for the different data sets? Do you notice any patterns?
+
+Try changing `+ geom_histogram()` to [`+geom_density`](https://ggplot2.tidyverse.org/reference/geom_density.html) (see link for examples). This will provide a smoothed line representing the shape of the distribution of data. The y axis changes from a count of the data, to a probability (0 to 1). You can add another factor to this plot, to see multiple density plots on top of one another. For example, within the `aes()` parameters, add `fill = home_location`. To make it a little easier to see each factor, add `alpha = .3` outside of the `aes()` parameters.
+
+### Sampling data
+
+You will have seen that as you reduce the number of participants, the data becomes more noisy. Let's look at how taking samples of data dramatically affects the results we get. Let's start with normal distribution, representing the heights of a sample of 100 people, with a mean of 165 and a standard deviation of 10:
+
+```{r eval = FALSE}
+norm_heights <- tibble(height = rnorm(n = 100, mean = 165, sd = 10))
+
+norm_heights %>% 
+  ggplot()+
+  geom_density(aes(x = height))
+```
+
+You can run this several times (select code, ctrl+enter) and you will see the resulting density plot changes shape each time. This is because we are drawing a new set of heights at random each time the code is run. Overall though, the density plot will look fairly "normal" and we will see something close to the "bell-shaped" normal distribution. Increase the number of data points to `n = 100000` and run it again a few times. You will now see a *very* stable normal distribution of data around the mean height of 165.
+
+Let's now also add a step before our graph to sample from this set of heights. Use the `slice_sample()` command to take a small sample first of all (say 5) and then slowly increase the number of samples drawn each time:
+
+```{r eval = FALSE}
+norm_heights <- tibble(height = rnorm(n = 100000, mean = 165, sd = 10))
+
+norm_heights %>% 
+  slice_sample(n = 5) %>%
+  ggplot()+
+  geom_density(aes(x = height))
+```
+
+**Discussion points**
+What happens to the density plot as you take larger samples?
+At what point does it start to look acceptably normal?
+What happens when you change the standard deviation of the data (decrease and increase)?
+How would this affect your decisions when collecting data in an experiment? 
 
