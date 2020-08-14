@@ -5,9 +5,8 @@ account: tombeesley
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 2663699
-bundleId: 3507108
+bundleId: 3515247
 url: https://tombeesley.shinyapps.io/Week_6/
-when: 1597248794.63428
+when: 1597397037.1206
 asMultiple: FALSE
 asStatic: FALSE
-ignoredFiles: 1_intro_to_R_learnr.html|1_intro_to_R_learnr.Rmd

@@ -23,7 +23,7 @@ When you are ready to get started, click the "Next Topic" button below.
 
 ## R basics
 
-### Basic addition
+### Basic arithmetic
 
 In this first section we will go through basic features of r. 
 Run the following code in the console:
@@ -39,7 +39,7 @@ Remember that parentheses can be important when performing calculations:
 ```
 It's always a good idea to comment your code as you go. You can do this using the "#" symbol. Everything on a line after the # is not treated as code. Try adding comments to your previous exercise above to check.
 
-### Basic variables
+### Variables
 
 In R, we will often want to store our calculations in a variable. To do that, we use an arrow symbol, indicating the direction of "assignment". You can create the arrow by typing a "<" symbol and then a "-" symbol. 
 
@@ -63,13 +63,13 @@ var_1 <- 9 # assign 9 to variable called "var_1"
 var_1 + 
 ```
 
-Variables can also store "characters" in a variable:
+Variables can also store strings of *characters*, which must be placed in "":
 
 ```{r, echo =TRUE}
 my_name <- "Bob"
 ```
 
-Variables don't have to be single digits or characters. It is often useful to create an "vector":
+Variables can have multiple items in them, whether they be numbers or characters. For example it is often useful to create an *vector*:
 
 ```{r, echo =TRUE}
 my_numbers <- c(1,2,3)
