@@ -189,6 +189,8 @@ filter(dataQ, countries_visited > 10 & !gender == "female")
 
 ## The analysis pipeline
 
+###
+
 The select and filter commands are just some of the ways we can shape the data we are working with. As we move from the raw data, to the data of interest, we will build up a series of such commands to obtain the data that we are interested in. For example, we might want to first `select()` some columns, and then `filter()` the data:
 
 ```{r nonpipe, exercise = TRUE}
@@ -264,7 +266,7 @@ Now you have completed this week's tutorial, it's time to put some of these skil
 Copy the lines below and paste them at the top of the script. This will load the tidyverse set of packages and then read the data into R Studio from github:
 
 
-```{r eval = FALSE}
+```{r echo = TRUE, eval = FALSE}
 library(tidyverse)
 dataQ <- read_csv("https://raw.githubusercontent.com/tombeesley/LU_PSYC121_122_labs/master/data_clean.csv")
 head(dataQ) # look at the first few rows
@@ -274,14 +276,14 @@ head(dataQ) # look at the first few rows
 
 Once the data is loaded in, you will see it in the environment. First, remind yourself of the column names. Then we can use our pipe to send this into the graphing tools `ggplot()`:
 
-```{r, eval = FALSE}
+```{r, echo = TRUE, eval = FALSE}
 dataQ %>% 
   ggplot()
 ```
 
 Start by plotting a histogram (`+ geom_histogram()`) of the number of countries that participants have visited.
 
-Let's look at that variable for just a subset of data. Use the select, filter and pipe commands to process the data, store the resulting data as tibble, and then plot that data:
+Let's look at the distribution of that variable for just a subset of the data. Use the select, filter and pipe commands to process the data, store the resulting data as tibble, and then plot that data:
 
 1. Select the columns *gender*, *countries_visited*, *home_location*.
 2. Filter the data to participants who come from the North-West of England
@@ -297,9 +299,9 @@ Try changing `+ geom_histogram()` to [`+geom_density`](https://ggplot2.tidyverse
 
 ### Sampling data
 
-You will have seen that as you reduce the number of participants, the data becomes more noisy. Let's look at how taking samples of data dramatically affects the results we get. Let's start with normal distribution, representing the heights of a sample of 100 people, with a mean of 165 and a standard deviation of 10:
+You will have seen that as you reduce the number of participants, the data becomes more noisy. Let's look at how taking samples of data dramatically affects the results we get. Let's start with a normal distribution, representing the heights of a sample of 100 people, with a mean of 165 and a standard deviation of 10:
 
-```{r eval = FALSE}
+```{r echo = TRUE, eval = FALSE}
 norm_heights <- tibble(height = rnorm(n = 100, mean = 165, sd = 10))
 
 norm_heights %>% 
@@ -311,7 +313,7 @@ You can run this several times (select code, ctrl+enter) and you will see the re
 
 Let's now also add a step before our graph to sample from this set of heights. Use the `slice_sample()` command to take a small sample first of all (say 5) and then slowly increase the number of samples drawn each time:
 
-```{r eval = FALSE}
+```{r echo = TRUE, eval = FALSE}
 norm_heights <- tibble(height = rnorm(n = 100000, mean = 165, sd = 10))
 
 norm_heights %>% 
@@ -321,8 +323,12 @@ norm_heights %>%
 ```
 
 **Discussion points**
+
 What happens to the density plot as you take larger samples?
+
 At what point does it start to look acceptably normal?
+
 What happens when you change the standard deviation of the data (decrease and increase)?
+
 How would this affect your decisions when collecting data in an experiment? 
 
