@@ -1,0 +1,147 @@
+---
+title: "PSYC121: Week 7 Lab"
+output: 
+  learnr::tutorial:
+    progressive: true
+    allow_skip: true
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE, exercise.startover = TRUE}
+library(tidyverse)
+library(learnr)
+library(kableExtra)
+dataQ <- read_csv("data_clean.csv")
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Summarising data
+
+One of our main aims as scientists is to explore data and summarise the findings. Take for example the Stroop data that you contributed in the class questionnaire. Let's select that data, and include a few other variables of interest. Use the `select()` command you learnt last week to select gender, height, home_location, and all the stroop data:
+
+```{r select_stroop, exercise = TRUE}
+# rememeber you can use colnames() to view the column names
+dataQ_stroop <- dataQ %>% 
+  select()
+```
+
+```{r select_stroop-hint-1}
+dataQ_stroop <- dataQ %>% 
+  select(gender, 
+         height, 
+         home_location)
+```
+
+```{r select_stroop-solution}
+dataQ_stroop <- dataQ %>% 
+  select(gender, 
+         height, 
+         home_location,
+         stroop_control:stroop_incompatible) 
+
+# another solution:
+dataQ_stroop <- dataQ %>% 
+  select(gender, 
+         height, 
+         home_location,
+         starts_with("stroop")) # use the function "starts_with" to find all columns starting with "stroop"
+
+```
+
+Make sure you check your solution to this before you continue. We'll use the `dataQ_stroop` from the solution for the next set of examples.
+
+###
+
+Let's think about some questions we might ask with these data. First, let's identify what types of data we have using the `summary()` function. 
+
+```{r summarise_example, exercise=TRUE, exercise.setup = "select_stroop-solution"}
+
+summary(dataQ_stroop)
+
+```
+
+###
+
+We can see that we have 4 numeric variables (*height* and the *stroop_* variables) and these all have useful numerical summaries (min, mean, etc). However *gender* and *home_location* are character variables. In the language of statistical analysis, these are **categorical** variables that have a number of **levels**. 
+
+In our analysis, we can ask interesting questions about the relationships between all these variables. For example, we might want to know how stroop performance differs depending on where you come from. Let's take stroop_control performance for now. We can see the mean performance in our summary for the whole data set, but how does this differ by *home_location*? One way to look at this is to use the `filter()` command from last week's lab. For example:
+
+```{r filter_mean_example, exercise=TRUE, exercise.setup = "select_stroop-solution"}
+
+dataQ_stroop %>% 
+  filter(home_location == "North West, England") %>% 
+  summarise(stroop_control_mean = mean(stroop_control, na.rm = TRUE)) # na.rm removes any NA (not available) data
+
+```
+###
+
+The function `summarise()` is used here, unsurprisingly, to provide a summary of the data it is given. Note that the filter function here is getting the data for the people from the NW, and the summary we ask for is the mean. We are *assigning* (`=`) that summary to a new variable in the output called *stroop_control_mean*. 
+
+We could of course do these steps several times, for each of the *levels* of the *home_location* categorical variable. I'm sure you can see that things would get a bit messy, even for our fairly simple categorical variable. What if we had a variable with 20 levels? What if we wanted to change from `mean` to `median`?
+
+## Grouped data operations
+
+Thankfully there's a much neater way to do this: we can tell R to `group_by()` the categorical variable, and for each level `summarise()` the data on our variable of interest:
+
+```{r group_by, exercise=TRUE, exercise.setup = "select_stroop-solution"}
+dataQ_stroop %>% 
+  group_by(home_location) %>% 
+  summarise(stroop_control_mean = mean(stroop_control, na.rm = TRUE))
+
+```
+###
+
+Just like for our select commands, we can add multiple commands to `summarise()`. Complete the code below to provide summaries of all the *stroop_* variables and the also the *height* variable:
+
+```{r group_by_modify, exercise=TRUE, exercise.setup = "select_stroop-solution"}
+dataQ_stroop %>% 
+  group_by(home_location) %>% 
+  summarise(stroop_control_mean = mean(stroop_control, na.rm = TRUE),
+            stroop_compatible_mean = )
+
+
+```
+
+### Grouping by multiple variables
+
+You'll remember that our selection for "dataQ_stroop" had two categorical variables. We can perform a grouping on both of these selections, simply by listing them in the `group_by()` function, separated by commas. Use the empty box below to `group_by` both *gender* and *home_location*, and summarising the mean height of each group:
+
+```{r group_by_two_variables, exercise=TRUE, exercise.setup = "select_stroop-solution"}
+dataQ_stroop
+```
+
+```{r group_by_two_variables-hint-1}
+dataQ_stroop %>%
+  group_by(gender, )
+```
+
+```{r group_by_two_variables-hint-2}
+dataQ_stroop %>% 
+  group_by(gender, home_location) %>% 
+  summarise()
+```
+
+```{r group_by_two_variables-solution}
+dataQ_stroop %>% 
+  group_by(gender, home_location) %>% 
+  summarise(mean_height = mean(height, na.rm = TRUE))
+```
+###
+What happens to the output if we change the order of the variables in `group_by()`?
+
+## R Studio exercises
+
+It is worth taking a moment to make sure you fully understand the new `group_by()` and `summarise()` functions you have learnt this week. If you have any queries, now is the time to ask. Understanding how to use these functions and what they do together is very important for your data analysis skills. Together with `select()` and `filter()` and `%>%` , these functions will provide a very powerful set of tools for answering questions about your data. When combined with the graphing toolbox of `ggplot()`, you have a set of tools that can also communicate those answers to others. 
+
+Open up a new script in R Studio and save it as `Week_7.R`. As a group, work towards answering the following questions about the dataQ dataset:
+
+1. How does the mean number of days a week people spend on Facebook vary by their home location?
+
+2. If someone has more siblings, are they more likely to have visited more countries?
+
+3. Do people who admire Taylor Swift use Instagram more than those who admire Greta Thunberg? What about use of Twitter and Facebook?
+
+
+
+
+
