@@ -191,7 +191,7 @@ It's now time to get to grips with working in R Studio. For this set of exercise
 
 ### The Panes
 
-You will see that R Studio is divided into different "panes". You resize these using the grey strips between them. Sometimes it is useful to maximise or minimize a pane, but the default view is very useful. If you mess up the display and lose a pain, go to the menu bar at the top and select: View -> Panes -> Show All Panes. 
+You will see that R Studio is divided into different "panes". You resize these using the grey strips between them. Sometimes it is useful to maximise or minimize a pane, but the default view is very useful. If you mess up the display and lose a pane, go to the menu bar at the top and select: View -> Panes -> Show All Panes. 
 
 ### The Console
 
