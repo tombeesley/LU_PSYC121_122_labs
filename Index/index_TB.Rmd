@@ -22,3 +22,7 @@ This is a basic example of a learnr tutorial, mainly for demo purposes, but migh
 This is a more complete set of exercises, focusing first on development of programming skills, with verbs `select()`, `filter()`, and use of `%>%`. It then explores the concepts of sampling data and the effect that has on resulting distributions of data observed.
 
 
+### [Week 7](https://tombeesley.shinyapps.io/Week_7/)
+
+This set of exercises teaches the `summarise()` and `group_by()` verbs, which are used to drill down into data to extract meaningful summaries across levels of categorical variables. Students will need to then answer a set of queries using these commands in R Studio. 
+
