@@ -1,0 +1,13 @@
+name: Week_6_learnr
+title: Week_6_learnr
+username:
+account: tombeesley
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 3153764
+bundleId: 3823947
+url: https://tombeesley.shinyapps.io/Week_6_learnr/
+when: 1604585026.90238
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: old/data_clean.csv|old/PSYC121_Week_6.R|old/Week_6.html|old/Week_6.Rmd|old/rsconnect/documents/Week_6.Rmd/shinyapps.io/tombeesley/Week_6.dcf

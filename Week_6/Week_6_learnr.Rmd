@@ -1,0 +1,133 @@
+---
+title: "PSYC121: Week 6 Lab"
+output: 
+  learnr::tutorial:
+    progressive: true
+    allow_skip: true
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE, exercise.startover = TRUE}
+library(tidyverse)
+library(learnr)
+library(kableExtra)
+load("tidy_data.RData")
+data <- data %>% 
+  mutate(gender_identity = if_else(gender_identity == "Female", "Female", "Other")) %>% 
+  select(gender_identity, home_location, home_location_in_UK, facebook_friends, instagram_followers)
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## How these tutorials work
+
+These interactive tutorials are designed to provide you with a introduction to key functions and skills in R. Within each section you will find short exercises to complete. Often these will ask you to run bits of code, or to complete some partially complete code, and then run it. 
+
+For each box, you simply click "Run Code" when you are ready to do so. When you do this, the code is executed by R, and you will see the output of the code. You **do not** need to have R Studio open to run these (they run in a web-based version of R, in the background). 
+
+When you run the code, you will see output produced (just like in the console in R Studio). Sometimes the result will be expected, but at other times you will run into problems. This is OK! Programming is all about making mistakes and figuring out what went wrong. 
+
+To help you get through these exercises, we sometimes provide "hints". Click the "hint" button if you are stuck and not sure what to do. Sometimes you will also see a "solution" to the exercise. Use hints and solutions when you really need them, but don't simply jump straight for the solution. **You will learn a lot more if you try to figure things out yourself**. So always try out your ideas and feel free to experiment with the code at any time - the code you enter is not going to break the computer! You can choose to "start over" at any time, with a small button under the menu (note though, that this resets the code in every box).  If you ever get stuck, there is always an option to move on to the next exercise.
+
+When you are ready to get started, click the "Next Topic" button below. 
+
+## Summarising data
+
+For the purposes of this week's online tutorial we have loaded in a selection of the data (which we've stored as `data`) from the PSYC121 questionnaire. Let's take a look at the data we have using the `summary()` function. 
+
+```{r summary_example, exercise=TRUE}
+
+summary(data)
+
+```
+
+###
+
+You can see that we have 5 variables (columns) in our data. The first 3 are "character" variables, which reflect nominal (or "categorical") data. The 4th and 5th variables are numerical variables, and here we see interesting summary statistics. Let's look at the "levels" or different responses of the nominal variables, using `count()`. The command given below tells us the number of each type of response for the  *gender_identity* variable (note we have recoded all responses that weren't "Female" as "Other")
+
+```{r count_example, exercise=TRUE}
+
+count(data,gender_identity)
+
+```
+
+Use the above code box to add more `count()` commands to explore the responses for the variables *home_location* and *home_location_in_UK*. What happens if you add two or three nominal variables to `count()`, separated with commas? 
+
+###
+
+Let's start asking interesting questions about the relationships between these variables. For example, we might want to know how many facebook friends someone has if they come from Asia. We can see the mean number of Facebook friends in our summary for the whole data set above, using `summary(data)`, but how can we look at this for specific values of *home_location*? One way to look at this is to use the `filter()` command. For example:
+
+```{r filter_mean_example, exercise=TRUE, exercise.setup = "select_stroop-solution"}
+
+data %>% 
+  filter(home_location == "Asia") %>% 
+  summarise(friends = mean(facebook_friends, na.rm = TRUE)) # na.rm removes any NA (not available) data
+
+```
+###
+
+This command sends the data using the `%>%` (pipe) command, first to a filter, which keeps only the data where the home location is Asia, and then the result is piped to a summarise command.
+
+We used the summarise command in Week 3, but here we will recap and extend on what we learnt.
+
+As you know from Week 3, the `summarise()` function is used to provide a summary of the data. The filter function is getting the data for the people from Asia, and the summary we then ask for is the mean. We are *assigning* (`=`) that summary statistic to a new variable in the output called *friends*. 
+
+We could of course do these steps several times, for each of the *levels* of the *home_location* variable. This wouldn't be too hard to do for our fairly simple nominal variable (*home_location* has only 3 levels), but what if we had a nominal variable with 10 levels? And what if we wanted to change from `mean` to `median` in each of these 10 cases? That would start to become very tedious.
+
+## Grouped data operations
+
+Thankfully there's a much neater way to do this: we can tell R to `group_by()` the nominal variable, and for each level `summarise()` the data on our variable of interest:
+
+```{r group_by, exercise=TRUE}
+data %>% 
+  group_by(home_location) %>% 
+  summarise(friends = mean(facebook_friends, na.rm = TRUE))
+
+```
+###
+
+While we've only summarised one variable here (*facebook_friends*), we can actually add multiple commands to `summarise()`, by separating each one with a `,` (comma). 
+
+**The code in the next box is incomplete**, and you will need to add in some code for it to run correctly. Complete the code below to provide an additional summary of the mean number of *instagram_followers*:
+
+```{r group_by_modify, exercise=TRUE}
+# INCOMPLETE CODE - ADD CODE TO GET IT TO RUN
+data %>% 
+  group_by(home_location) %>% 
+  summarise(friends = mean(facebook_friends, na.rm = TRUE),
+            followers = )
+
+```
+
+### Grouping by multiple variables
+
+You'll remember that our data had multiple nominal variables. We can perform a grouping on combinations of these variables, simply by listing them in the `group_by()` function, separated by commas. Add to the incomplete code below to `group_by` both *gender_identity* and *home_location*, and then `summarise` the median number of *facebook_friends*:
+
+```{r group_by_two_variables, exercise=TRUE, exercise.setup = "select_stroop-solution"}
+# INCOMPLETE CODE - ADD CODE TO GET IT TO RUN
+data %>% 
+```
+
+```{r group_by_two_variables-hint-1}
+data %>%
+  group_by(gender_identity, )
+```
+
+```{r group_by_two_variables-hint-2}
+data %>% 
+  group_by(gender_identity, home_location) %>% 
+  summarise()
+```
+
+```{r group_by_two_variables-solution}
+data %>% 
+  group_by(gender_identity, home_location) %>% 
+  summarise(median_FF = median(facebook_friends, na.rm = TRUE))
+```
+
+##
+
+This is now the end of the online tutorial on using `group_by()` and `summarise()`. Please return to the tasks in the lab worksheet.
+
+
+
+
