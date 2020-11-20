@@ -1,0 +1,192 @@
+---
+title: "PSYC121: Week 8 Lab"
+output: 
+  learnr::tutorial:
+    progressive: true
+    allow_skip: true
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE, exercise.startover = TRUE}
+library(tidyverse)
+library(learnr)
+library(kableExtra)
+load("tidy_data.RData")
+
+data <- data %>%
+  select(home_location, maths_skills, countries_visited) %>%
+  mutate(maths_skills = case_when(str_detect(maths_skills, "Well above") ~ "above",
+                                  str_detect(maths_skills, "little above") ~ "above",
+                                  maths_skills == "Average" ~ "average",
+                                  str_detect(maths_skills, "little below") ~ "below",
+                                  str_detect(maths_skills, "Well below") ~ "below")) %>% 
+  filter(countries_visited > 0)
+
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Exploring the data
+
+For this week's online tutorial we have loaded in a new selection of the data (which we've stored as `data`) from the PSYC121 questionnaire. Let's take a look at the data we have using the `summary()` function. 
+
+```{r summary_example, exercise=TRUE}
+
+summary(data)
+
+```
+
+###
+
+You can see that we have 3 variables (columns) in our data. The first 2 are "character" variables, which reflect nominal (or "categorical") data. The 3rd is numerical, and here we see interesting summary statistics. 
+
+Use the count function to see the different levels of the home_location and maths_skills variables:
+
+```{r count_example, exercise=TRUE}
+
+```
+
+## Visualise the data
+
+Last week you learnt about the ggplot() commands. The code in the next box will create a dotplot of the *countries_visited* variable on the y-axis, separating the data by the *maths_skills* variable on the x-axis. You'll see there are lots of additional parameters, and each one has a comment (use # to add comments to your code!) next to it to explain the purpose.
+
+```{r dotplot, exercise=TRUE}
+
+data %>% 
+  ggplot(aes(y = countries_visited, x = maths_skills)) +
+  geom_dotplot(binaxis = "y", # dots grouped according to variable mapped to y
+               binwidth = 1, # how many values do we want grouped (binned) together
+               stackdir = "center", # centre alignment of the dots
+               dotsize = .5, # sizing parameter
+               fill = "blue") # fill colour
+
+```
+
+### Global aes()
+
+If you read the code above carefully, then you will have seen that it's a little different to the format we used last week. Here the `aes()` command - which maps the variables in the data to the features of the plot - has been placed within the main `ggplot()` command. 
+
+Why might we do this? Well for this figure it works either way - you can place the `aes()` command in `geom_dotplot()` or `ggplot()` and get the same result. Feel free to try this for yourself if you like. But using the `aes()` within the main `ggplot()` ensures that those mappings will be applied across all of the geoms in the plot. Let's try this ourselves by running the code below:
+
+```{r global_aes, exercise=TRUE}
+
+data %>% 
+  ggplot(aes(y = countries_visited, x = maths_skills)) +
+  geom_violin() +
+  geom_dotplot(binaxis = "y", # dots grouped according to variable mapped to y
+               binwidth = 1, # how many values do we want grouped (binned) together
+               stackdir = "center", # centre alignment of the dots
+               dotsize = .5, # sizing parameter
+               fill = "blue") # fill colour
+
+```
+###
+
+We have added a **violin plot** with `geom_violin()`. This is another way to present distributional data, and gives a sense of the shape of the distribution with its curves. Note that the violin plots were drawn first, and the dotplot on top. The dots would be hidden if it was the other way around.
+
+## Plotting means and standard errors
+
+In previous weeks you have used the `group_by()` and `summarise()` commands to calculate some mean values within your data, as a function of other variables. For example, we can do that here for the mean countries traveled by the home location of the respondent:
+
+```{r group_mean_sd, exercise = TRUE}
+
+data %>% 
+  group_by(home_location) %>% 
+  summarise(mean_travel = mean(countries_visited))
+
+
+```
+
+In the next code box, add in a second line to the summarise command that calculates the standard deviation (`sd()`) of the data.
+
+```{r group_sd, exercise = TRUE}
+
+data %>% 
+  group_by(home_location) %>% 
+  summarise(mean_travel = mean(countries_visited))
+
+
+```
+
+```{r group_sd-hint}
+
+data %>% 
+  group_by(home_location) %>% 
+  summarise(mean_travel = mean(countries_visited),
+            sd_travel = )
+
+
+```
+
+```{r group_sd-solution}
+
+data %>% 
+  group_by(home_location) %>% 
+  summarise(mean_travel = mean(countries_visited),
+            sd_travel = sd(countries_visited))
+
+
+```
+
+### From SDs to SEs
+
+We've also seen in the lectures that when we make inferences about differences between means, then it is important to estimate the variability in the sampling of the mean. We call this the **standard error**, and when we plot means it is very common to also plot the standard error of the mean (**SEM**). 
+
+SE is calculated as the standard deviation divided by the square root of N. Here is an example of calculating this in the summarise command: 
+
+```{r se_example, exercise = TRUE}
+
+data %>% 
+  group_by(home_location) %>% 
+  summarise(mean_travel = mean(countries_visited),
+            se_travel = sd(countries_visited)/sqrt(n())) 
+
+# n() is simply how many rows of data there are for this selection
+
+
+```
+
+### Pipe it to ggplot()
+
+The results of this summary can now be graphed, by sending the results (`%>%`) into the ggplot command. Read through the code below carefully, then click Run to plot these means and standard errors in a graph:
+
+```{r plot_se, exercise = TRUE}
+
+data %>% 
+  group_by(home_location) %>% 
+  summarise(mean_travel = mean(countries_visited),
+            se_travel = sd(countries_visited)/sqrt(n())) %>% 
+  ggplot(aes(y = mean_travel, x = home_location)) +
+  geom_col() +
+  geom_errorbar(aes(ymin = mean_travel - se_travel, # the minimum value for the error bar
+                    ymax = mean_travel + se_travel), # the maximum value for the error bar
+                width = .2) # how wide we want the error bar - feel free to change this.
+
+
+```
+
+```{r plot_se-solution}
+
+data %>% 
+  group_by(home_location) %>% 
+  summarise(mean_travel = mean(countries_visited),
+            se_travel = sd(countries_visited)/sqrt(n())) %>% 
+  ggplot(aes(y = mean_travel, x = home_location, colour = home_location, fill = home_location)) +
+  geom_col() +
+  geom_errorbar(aes(ymin = mean_travel - se_travel, # the minimum value for the error bar
+                    ymax = mean_travel + se_travel), # the maximum value for the error bar
+                width = .2) # how wide we want the error bar - feel free to change this.
+
+
+```
+
+Note how we have placed the y and x mappings into the `ggplot(aes())` here, so that they are shared by the columns (`geom_col`) and the error bars (`geom_errorbar`). 
+
+The graph is very grey and boring! Try to mapping the *home_location* variable to *fill* as well as *x*. Now try mapping it to *colour* instead of, or in addition to, *fill*. There is a solution available if you get stuck.
+
+### End of tutorial
+
+This is now the end of the online tutorial `ggplot`. Please return to the tasks in the lab worksheet.
+
+
+
+
